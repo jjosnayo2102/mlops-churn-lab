@@ -38,5 +38,8 @@ los detecta. Esta ficha es el registro de esas decisiones: se versiona junto al 
 
 | Fecha | Decisión | Motivo |
 |---|---|---|
-| | Umbral de decisión elegido por costo, no 0.5 | Un FN cuesta el doble que un FP |
-| | El modelo se selecciona por F1 de validación cruzada | Test queda reservado para la evaluación final |
+| 2026-11-11 | Umbral de decisión elegido por costo (`0.3`), no `0.5` | Un FN (S/ 200) cuesta el doble que un FP (S/ 100); reduce el costo por cliente a S/ 43.33 frente a S/ 50.00 de contactar a todos |
+| 2026-11-11 | El modelo se selecciona por F1 de validación cruzada estratificada (5 folds) | Test queda reservado únicamente para la evaluación final y evita elegir por azar en un dataset pequeño |
+| 2026-11-11 | Empaquetar `ColumnTransformer` y estimador dentro de un `Pipeline` | Elimina el training-serving skew detectado en la API y evita data leakage en validación cruzada |
+| 2026-11-11 | Evaluar `GradientBoostingClassifier` como cuarto modelo candidato | Comparar una familia adicional de boosting en MLflow; obtuvo menor F1 CV (~0.65) que `random_forest` (~0.69), por lo que no reemplazó al ganador |
+| 2026-11-11 | Promover `random_forest` a `@champion` usando MLflow aliases | Superó los 4 checks del quality gate (F1 = 0.7013, ROC-AUC, recall_gap y costo vs. sin modelo) |
